@@ -1,0 +1,16 @@
+{
+  "smtp": {
+    "host": "smtp.mail.ru",
+    "port": 465,
+    "encryption": "ssl",
+    "username": "my@mail.ru",
+    "password": "1q2w3e4r5t6y7u8i9o0p"
+  },
+  "from": {
+    "email": "noreply@mail.ru",
+    "name": "TCSE веб-студия"
+  },
+  "site_name": "Рассылка",
+  "site_url": "https://tcse-cms.com",
+  "admin_password": "MySecretPass123"
+}

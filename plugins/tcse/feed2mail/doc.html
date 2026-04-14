@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed2Mail v1.1 — Документация плагина для RSS-рассылок</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            color: #1a1a2e;
+            line-height: 1.5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1a1a2e 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .version {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Grid layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 24px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header .icon {
+            font-size: 28px;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Code blocks */
+        pre {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            padding: 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 13px;
+            margin: 15px 0;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #d63384;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 24px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* File tree */
+        .file-tree {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .file-tree .folder {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .file-tree .file {
+            color: #28a745;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 32px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="badge">📧 RSS Email Newsletter</div>
+        <h1>Feed2Mail</h1>
+        <div class="subtitle">Профессиональный плагин для автоматических RSS-рассылок</div>
+        <div class="version">Version 1.1 | Стабильный релиз</div>
+    </div>
+
+    <!-- Grid Cards -->
+    <div class="grid">
+        <!-- О проекте -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">📖</span> О плагине</h2>
+            </div>
+            <div class="card-content">
+                <p><strong>Feed2Mail</strong> — это PHP-плагин для создания и управления email-рассылками на основе RSS-лент. Позволяет автоматически генерировать красивые HTML-письма из новостей и отправлять подписчикам.</p>
+                <br>
+                <p><strong>Версия:</strong> 1.1</p>
+                <p><strong>Дата релиза:</strong> 14 апреля 2026</p>
+                <p><strong>Разработчик:</strong> TCSE студия</p>
+                <p><strong>Сайт:</strong> <a href="https://tcse-cms.com" target="_blank">tcse-cms.com</a></p>
+            </div>
+        </div>
+
+        <!-- Системные требования -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">⚙️</span> Системные требования</h2>
+            </div>
+            <div class="card-content">
+                <ul>
+                    <li><strong>PHP</strong> ≥ 7.4 (рекомендуется 8.0+)</li>
+                    <li><strong>Расширения:</strong> json, session, fileinfo, mbstring</li>
+                    <li><strong>SimpleXML</strong> — для парсинга RSS</li>
+                    <li><strong>PHPMailer</strong> (опционально, для SMTP)</li>
+                    <li><strong>Права на запись</strong> в папку <code>/data</code> и <code>/assets/uploads</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Быстрая установка -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">🚀</span> Быстрая установка</h2>
+            </div>
+            <div class="card-content">
+                <ol>
+                    <li>Скопировать папку <code>feed2mail</code> в <code>/plugins/tcse/</code></li>
+                    <li>Убедиться, что папки <code>data/</code> и <code>assets/uploads/</code> доступны для записи</li>
+                    <li>Перейти в админку: <code>/plugins/tcse/feed2mail/admin/</code></li>
+                    <li>Ввести пароль по умолчанию: <code>feedByTalik2026</code></li>
+                    <li>Настроить SMTP или оставить <code>php_mail</code></li>
+                    <li>Вставить код виджета на сайт</li>
+                </ol>
+                <div style="margin-top: 15px;">
+                    <span class="status-badge status-success">✅ Готов к работе</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Структура проекта -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2><span class="icon">📁</span> Структура проекта</h2>
+        </div>
+        <div class="card-content">
+            <div class="file-tree">
+                <pre style="margin: 0; background: transparent; padding: 0;">
+<strong style="color:#667eea">/plugins/tcse/feed2mail/</strong>
+├── <span class="file">config.php</span>                 # Главный конфиг с автопараметрами
+├── <span class="file">index.php</span>                  # Точка входа
+│
+├── <strong class="folder">admin/</strong>                     # Административная панель
+│   ├── <span class="file">auth.php</span>               # Авторизация
+│   ├── <span class="file">index.php</span>              # Дашборд со статистикой
+│   ├── <span class="file">subscribers.php</span>        # Управление подписчиками
+│   ├── <span class="file">campaigns.php</span>          # Отправка рассылок
+│   ├── <span class="file">rss_import.php</span>         # Импорт новостей из RSS
+│   ├── <span class="file">settings.php</span>           # Настройки шапки/подвала/логотипа
+│   ├── <span class="file">templates.php</span>          # Шаблоны (в разработке)
+│   └── <span class="file">logout.php</span>             # Выход из админки
+│
+├── <strong class="folder">api/</strong>                      # Публичные endpoints
+│   ├── <span class="file">subscribe.php</span>         # Подписка (POST) и подтверждение (GET)
+│   ├── <span class="file">unsubscribe.php</span>       # Отписка
+│   └── <span class="file">send.php</span>               # (резерв)
+│
+├── <strong class="folder">assets/</strong>                   # Фронтенд
+│   ├── <span class="file">embed.js</span>              # Виджет подписки
+│   ├── <span class="file">style.css</span>              # Стили админки
+│   └── <strong class="folder">uploads/</strong>               # Загруженные логотипы
+│
+├── <strong class="folder">includes/</strong>                # Бизнес-логика
+│   ├── <span class="file">functions.php</span>         # Работа с данными, шаблоны
+│   └── <span class="file">mailer.php</span>             # Отправка писем (SMTP / PHP mail)
+│
+├── <strong class="folder">data/</strong>                     # Хранилище данных (JSON)
+│   ├── <span class="file">config.json</span>            # SMTP, пароль, настройки
+│   ├── <span class="file">subscribers.json</span>       # База подписчиков
+│   ├── <span class="file">template_settings.json</span> # Шапка, подвал, логотип
+│   └── <span class="file">rate_limit.json</span>        # Защита от ботов
+│
+└── <strong class="folder">templates/</strong>               # (резерв)
+    └── <span class="file">default.html</span>
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основные функции -->
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">📝</span> Виджет подписки</h2>
+            </div>
+            <div class="card-content">
+                <p><strong>Код для вставки на сайт:</strong></p>
+                <pre><code>&lt;div id="feed2mail-form" 
+     data-site-url="https://ваш-сайт.ru" 
+     data-plugin-path="/plugins/tcse/feed2mail"&gt;&lt;/div&gt;
+&lt;script src="https://ваш-сайт.ru/plugins/tcse/feed2mail/assets/embed.js"&gt;&lt;/script&gt;</code></pre>
+                <p><strong>Особенности:</strong></p>
+                <ul>
+                    <li>✅ Автоопределение пути к API</li>
+                    <li>✅ Защита от ботов (rate limiting + honeypot)</li>
+                    <li>✅ Двойной opt‑in (подтверждение по email)</li>
+                    <li>✅ CORS — работает на любых доменах</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">📡</span> RSS → Email</h2>
+            </div>
+            <div class="card-content">
+                <p><strong>Поддерживаемые форматы:</strong> RSS 2.0, Atom</p>
+                <p><strong>Настройки генерации:</strong></p>
+                <ul>
+                    <li>Количество записей (1–50)</li>
+                    <li>Заголовок, дата, описание, изображение</li>
+                    <li>Обрезка описания до N символов</li>
+                    <li>Кнопка «Читать далее»</li>
+                    <li>Центрирование изображений</li>
+                </ul>
+                <div class="status-badge status-info">🎨 Поддержка HTML-шаблонов</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">✉️</span> Отправка рассылок</h2>
+            </div>
+            <div class="card-content">
+                <p><strong>Режимы отправки:</strong></p>
+                <ul>
+                    <li><code>php_mail</code> — стандартная PHP mail()</li>
+                    <li><code>smtp</code> — PHPMailer + SMTP-сервер</li>
+                </ul>
+                <p><strong>Особенности:</strong></p>
+                <ul>
+                    <li>Автоматическое добавление шапки и подвала</li>
+                    <li>Подстановка логотипа</li>
+                    <li>Ссылка на отписку в каждом письме</li>
+                    <li>Статистика отправки (успешно/ошибки)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки шаблонов -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2><span class="icon">🎨</span> Настройка шапки и подвала</h2>
+        </div>
+        <div class="card-content">
+            <p>В файле <code>data/template_settings.json</code> или через админку → Настройки писем:</p>
+            <pre><code>{
+  "site_name_in_email": "Блог Талика",
+  "header": "&lt;div style=\"background: #1a1a2e; padding: 20px;\"&gt;
+            &lt;h1&gt;{{SITE_NAME}}&lt;/h1&gt;
+            &lt;/div&gt;",
+  "footer": "&lt;div&gt;© {{YEAR}} {{SITE_NAME}}. 
+            &lt;a href=\"{{UNSUBSCRIBE_LINK}}\"&gt;Отписаться&lt;/a&gt;&lt;/div&gt;",
+  "logo_url": "https://site.ru/logo.png",
+  "logo_position": "top",
+  "use_header": true,
+  "use_footer": true
+}</code></pre>
+            <p><strong>Доступные переменные:</strong> <code>{{SITE_NAME}}</code>, <code>{{SITE_URL}}</code>, <code>{{YEAR}}</code>, <code>{{LOGO_URL}}</code>, <code>{{UNSUBSCRIBE_LINK}}</code></p>
+        </div>
+    </div>
+
+    <!-- Конфигурация отправки -->
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">⚙️</span> Конфигурация <code>config.json</code></h2>
+            </div>
+            <div class="card-content">
+                <pre><code>{
+  "mail_method": "smtp",
+  "smtp": {
+    "host": "smtp.masterhost.ru",
+    "port": 465,
+    "encryption": "ssl",
+    "username": "user@domain.ru",
+    "password": "********"
+  },
+  "from": {
+    "email": "noreply@domain.ru",
+    "name": "Название рассылки"
+  },
+  "site_name": "Мой сайт",
+  "site_url": "https://domain.ru",
+  "admin_password": "ваш_пароль",
+  "auto_detect_url": true,
+  "auto_detect_path": true
+}</code></pre>
+                <p><span class="status-badge status-success">✅ Автоопределение URL и пути плагина</span></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">🔐</span> Безопасность</h2>
+            </div>
+            <div class="card-content">
+                <table>
+                    <tr><th>Уровень</th><th>Механизм защиты</th></tr>
+                    <tr><td>Админка</td><td>Авторизация по паролю (сессия)</td></tr>
+                    <tr><td>API подписки</td><td>Rate limiting: 1 запрос / 10 сек с IP</td></tr>
+                    <tr><td>Подписка</td><td>Double opt‑in (подтверждение по email)</td></tr>
+                    <tr><td>Боты</td><td>Honeypot (скрытое поле website)</td></tr>
+                    <tr><td>CORS</td><td>Разрешены запросы с любых доменов (*)</td></tr>
+                </table>
+                <p><strong>Пароль админки:</strong> хранится в <code>data/config.json</code> → <code>admin_password</code></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статусы подписчиков -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2><span class="icon">📊</span> Статусы подписчиков</h2>
+        </div>
+        <div class="card-content">
+            <table>
+                <thead>
+                    <tr><th>Статус</th><th>Описание</th><th>Действие</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="status-badge status-warning">pending</span></td><td>Подписался, но не подтвердил email</td><td>Ожидает перехода по ссылке из письма</td></tr>
+                    <tr><td><span class="status-badge status-success">active</span></td><td>Подтвердил подписку</td><td>Получает рассылки</td></tr>
+                    <tr><td><span class="status-badge status-info">unsubscribed</span></td><td>Отписался</td><td>Может подписаться заново</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- API Endpoints -->
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">🔌</span> API Endpoints</h2>
+            </div>
+            <div class="card-content">
+                <p><strong>POST /api/subscribe.php</strong> — новая подписка</p>
+                <pre><code>{
+  "email": "user@example.com"
+}</code></pre>
+                <p><strong>GET /api/subscribe.php</strong> — подтверждение подписки</p>
+                <pre><code>?token=xxx&email=user@example.com</code></pre>
+                <p><strong>GET /api/unsubscribe.php</strong> — отписка</p>
+                <pre><code>?token=xxx&email=user@example.com</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon">🐛</span> Устранение неполадок</h2>
+            </div>
+            <div class="card-content">
+                <ul>
+                    <li><strong>Кракозябры в письмах</strong> → Проверить кодировку файлов (UTF-8 без BOM)</li>
+                    <li><strong>Не приходит письмо</strong> → Проверить SMTP или переключить на <code>php_mail</code></li>
+                    <li><strong>Ошибка CORS</strong> → Проверить заголовки в <code>api/subscribe.php</code></li>
+                    <li><strong>Не загружается логотип</strong> → Проверить права на <code>assets/uploads/</code> (755)</li>
+                    <li><strong>Не работает виджет</strong> → Открыть консоль браузера (F12), смотреть ошибки</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Changelog -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h2><span class="icon">📋</span> Changelog v1.1</h2>
+        </div>
+        <div class="card-content">
+            <ul>
+                <li><strong>Новое:</strong> Автоопределение пути к плагину и URL сайта</li>
+                <li><strong>Новое:</strong> Настройка шапки, подвала и логотипа через админку</li>
+                <li><strong>Новое:</strong> Защита админки паролем (сессионная авторизация)</li>
+                <li><strong>Новое:</strong> Rate limiting и honeypot для защиты от ботов</li>
+                <li><strong>Улучшено:</strong> Центрирование изображений в письмах (iOS fix)</li>
+                <li><strong>Улучшено:</strong> CORS-заголовки для виджета</li>
+                <li><strong>Исправлено:</strong> Путь к API в письмах подтверждения</li>
+                <li><strong>Исправлено:</strong> Кодировка UTF-8 в embed.js и subscribe.php</li>
+                <li><strong>Исправлено:</strong> Подстановка названия сайта из template_settings</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Feed2Mail v1.1 — Разработано <a href="https://tcse-cms.com" target="_blank">TCSE студия</a> | <a href="/plugins/tcse/feed2mail/admin/" target="_blank">Войти в админку</a></p>
+        <p style="margin-top: 10px; font-size: 12px;">© 2026 TCSE. Все права защищены. Лицензия: MIT</p>
+    </div>
+</div>
+</body>
+</html>

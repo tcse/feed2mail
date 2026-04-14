@@ -1,0 +1,9 @@
+{
+    "header": "<div style=\"background: #1a1a2e; padding: 20px; text-align: center;\">\r\n                        <h1 style=\"color: #fff; margin: 0;\">{{SITE_NAME}}<\/h1>\r\n                        <p style=\"color: #aaa; margin: 5px 0 0;\">Отправлено с {{SITE_URL}}<\/p>\r\n                     <\/div>",
+    "footer": "<div style=\"background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #666;\">\r\n                        <p>© {{YEAR}} {{SITE_NAME}}. Все права защищены.<\/p>\r\n                        <p>Вы получили это письмо, потому что подписаны на нашу рассылку.<\/p>\r\n                        <p><a href=\"{{UNSUBSCRIBE_LINK}}\" style=\"color: #007bff;\">Отписаться от рассылки<\/a><\/p>\r\n                     <\/div>",
+    "logo_url": "http:\/\/by.tcse-cms.com\/plugins\/tcse\/feed2mail\/assets\/uploads\/logo_1776094870.png",
+    "logo_position": "top",
+    "use_header": true,
+    "use_footer": true,
+    "site_name_in_email": "Блог Талика"
+}

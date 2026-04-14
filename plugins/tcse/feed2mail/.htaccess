@@ -1,0 +1,11 @@
+# Защита всей папки data
+RedirectMatch 403 ^/plugins/tcse/feed2mail/data/.*$
+
+# Защита конфигурационных файлов
+<FilesMatch "^(config\.php|config\.json)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Отключаем листинг директорий
+Options -Indexes
